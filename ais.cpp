@@ -1,5 +1,5 @@
 // Since Apr 2010
-// g++ ais_pos.cxx -o ais_pos -g -Wall -O3 -Wimplicit -W -Wredundant-decls -pedantic  -funroll-loops -fexpensive-optimizations 
+// g++ ais_pos.cxx -o ais_pos -g -Wall -O3 -Wimplicit -W -Wredundant-decls -pedantic  -funroll-loops -fexpensive-optimizations
 
 #include "ais.h"
 
@@ -22,9 +22,9 @@ const std::string nth_field(const std::string &str, const size_t n, const char c
     for (pos=0, count=0; count < n and pos != std::string::npos; count+=1) {
         if (pos>0) pos += 1; // Skip past the current char that matched
         pos = str.find(c, pos);
-    } 
+    }
     if (std::string::npos == pos) return std::string("");
-   
+
     const size_t start = pos;
     const size_t end = str.find(c, pos+1);
     if (std::string::npos == end) return str.substr(start);
@@ -58,7 +58,6 @@ bool nmea_ord_initialized = false;
 
 #ifdef VERIFY_ERROR_MESSAGES
 static void check_error_messages() {
-    
     std::cout << "AIS_OK:                       " << AIS_OK << " " << AIS_STATUS_STRINGS[AIS_OK] << std::endl;
     std::cout << "AIS_ERR_BAD_BIT_COUNT:        " << AIS_ERR_BAD_BIT_COUNT << " " << AIS_STATUS_STRINGS[AIS_ERR_BAD_BIT_COUNT] << std::endl;
     std::cout << "AIS_ERR_WRONG_MSG_TYPE:       " << AIS_ERR_WRONG_MSG_TYPE << " " << AIS_STATUS_STRINGS[AIS_ERR_WRONG_MSG_TYPE] << std::endl;
@@ -149,7 +148,7 @@ AisMsg *decode(std::string const &nmea_payload)
                     {
                         case 22:
                         {
-                            result = new Ais8_001_22(nmea_payload.c_str());
+                            result = new Ais8_001_22(nmea_payload.c_str(),0);
                             break;
                         }
                     }

@@ -12,7 +12,7 @@ Ais4_11::Ais4_11(const char *nmea_payload) {
     assert(nmea_payload);
     init();
 
-    std::bitset<168> bs; 
+    std::bitset<168> bs;
 
     status = aivdm_to_bits(bs, nmea_payload);
     if (had_error()) return;
@@ -38,8 +38,9 @@ Ais4_11::Ais4_11(const char *nmea_payload) {
     y = sbits(bs, 107, 27) / 600000.;
 
     fix_type = ubits(bs,134,4);
-    spare = ubits(bs,138,10);
-
+    transmission_ctl = bs[138];
+    spare = ubits(bs,139,9);
+    raim = bool(bs[148]);
 
     //
     // SOTDMA commstate
@@ -51,16 +52,16 @@ Ais4_11::Ais4_11(const char *nmea_payload) {
     utc_hour = utc_min = -1; utc_valid = false;
     slot_offset = -1; slot_offset_valid = false;
 
+    sync_state = ubits(bs, 149, 2);
     slot_timeout = ubits(bs,151,3);
 
-    //std::cout << "slot_timeout:" << slot_timeout << std::endl;
     switch (slot_timeout) {
     case 0:
         slot_offset = ubits(bs, 154, 14);
         slot_offset_valid=true;
         break;
     case 1:
-        utc_hour = ubits(bs, 154, 5); 
+        utc_hour = ubits(bs, 154, 5);
         utc_min = ubits(bs, 159, 7);
         utc_spare = ubits(bs, 166, 2);
         utc_valid = true;
@@ -92,12 +93,9 @@ void Ais4_11::print() {
               << "\tspare: " << spare << "\n"
               << "\traim: " << (raim?"true":"false") << "\n"
               << std::endl;
-        ;
-        
 }
 
 std::ostream& operator<< (std::ostream& o, Ais4_11 const& msg)
 {
-    return o << msg.message_id << ": " << msg.mmsi 
-        ;
+    return o << msg.message_id << ": " << msg.mmsi;
 }

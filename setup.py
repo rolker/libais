@@ -1,17 +1,18 @@
 #!/usr/bin/env python
 
-
-#from distutils.core import setup, Extension
 from setuptools import setup, find_packages, Extension
+
+version = file('VERSION').readline().strip()
 
 ais_module = Extension('ais',
                     sources = ['ais_py.cpp',
                                'ais.cpp',
-                               'ais1_2_3.cpp',
-                               'ais4_11.cpp',
-                               'ais5.cpp',
-                               # ais6
+                               'ais1_2_3.cpp', # Class A position
+                               'ais4_11.cpp', # Basestation report, '=' - UTC time response
+                               'ais5.cpp', # Static data report / ship name
+                               'ais6.cpp', # Addressed binary message (ABM)
                                'ais7_13.cpp',
+<<<<<<< HEAD
                                'ais8.cpp',
                                'ais8_001_22.cpp',
                                'ais8_366_22.cpp',
@@ -24,10 +25,34 @@ ais_module = Extension('ais',
                                'ais19.cpp',
                                'ais21.cpp',
                                'ais24.cpp',
+=======
+                               'ais8.cpp', # Broadcast binary message (BBM)
+                               'ais8_001_22.cpp', # Area notice
+                               'ais9.cpp',
+                               'ais10.cpp', # :
+                               # 11 See 4 - ;
+                               'ais12.cpp', # <
+                               # 13 See 7 - =
+                               'ais14.cpp', # >
+                               'ais15.cpp', # ?
+                               'ais16.cpp', # @
+                               'ais17.cpp', # A
+                               'ais18.cpp', # B
+                               'ais19.cpp', # C
+                               'ais20.cpp', # D
+                               'ais21.cpp', # E
+                               'ais22.cpp', # F
+                               'ais23.cpp', # G
+                               'ais24.cpp', # H
+                               'ais25.cpp', # I - single slot binary message
+                               'ais26.cpp', # J - Multi-slot binary message with comm-state
+                               'ais27.cpp', # K - Long-range position
+                               # 'ais28.cpp', # L - Not yet defined
+>>>>>>> 6761fb77405f747de605e16941532f33ba4b87ee
                                ])
 
 setup (name = 'libais',
-       version = '0.7',
+       version = version,
        description = 'Automatic Identification System decoding - ship tracking',
        author='Kurt Schwehr',
        author_email='schwehr@gmail.com',

@@ -43,13 +43,14 @@ extern const char *ais8_001_22_shape_names[8];
 class Ais8_001_22_SubArea {
 public:
     //Ais8_001_22_AreaShapeEnum area_shape;
-    virtual Ais8_001_22_AreaShapeEnum getType() const = 0;  
+    virtual Ais8_001_22_AreaShapeEnum getType() const = 0;
     // FIX: make the destructor pure virtual
     virtual ~Ais8_001_22_SubArea() //= 0;
     { /* std::cout << "Ais8_001_22_Subarea: destructor" << std::endl;*/ };
     virtual void print()=0;
 };
 
+// TODO: need pad?
 Ais8_001_22_SubArea* ais8_001_22_subarea_factory(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
 
 // or Point if radius is 0
@@ -135,6 +136,16 @@ public:
 // into one polygon if there are more than one?
 class Ais8_001_22_Polygon : public Ais8_001_22_Polybase {
 public:
+
+    // x, y, and precision sent as separate Point before the waypoint start
+    //float x,y; // longitude and latitude
+    //int precision; // How many decimal places for x and y.  FIX: in IMO
+
+    // Up to 4 points in a first message, but aggregated if multiple sub areas
+    std::vector<float> angles;
+    std::vector<float> dists_m;
+    unsigned int spare; // 2 bit
+
     Ais8_001_22_Polygon(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
     ~Ais8_001_22_Polygon() { /* std::cout << "Ais8_001_22_Polygon: destructor" << std::endl; */ };
     Ais8_001_22_AreaShapeEnum getType() const {return AIS8_001_22_SHAPE_POLYGON;}
@@ -168,16 +179,16 @@ public:
     int hour;  // UTC!
     int minute;
     int duration_minutes; // Time from the start until the notice expires
-    
+
     // 1 or more sub messages
 
     std::vector<Ais8_001_22_SubArea *> sub_areas;
 
-    Ais8_001_22(const char *nmea_payload);
+  Ais8_001_22(const char *nmea_payload, const size_t pad);
     ~Ais8_001_22();
     void print();
 
-    /* 
+    /*
        FIX: need some sort of higher level accessors and checks
        - return interpreted geometry and associated agreegated text
          - What formats to return?  GeoJSON, WKT, etc?
