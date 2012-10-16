@@ -137,14 +137,6 @@ public:
 class Ais8_001_22_Polygon : public Ais8_001_22_Polybase {
 public:
 
-    // x, y, and precision sent as separate Point before the waypoint start
-    //float x,y; // longitude and latitude
-    //int precision; // How many decimal places for x and y.  FIX: in IMO
-
-    // Up to 4 points in a first message, but aggregated if multiple sub areas
-    std::vector<float> angles;
-    std::vector<float> dists_m;
-    unsigned int spare; // 2 bit
 
     Ais8_001_22_Polygon(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
     ~Ais8_001_22_Polygon() { /* std::cout << "Ais8_001_22_Polygon: destructor" << std::endl; */ };

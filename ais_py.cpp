@@ -802,6 +802,7 @@ ais8_1_22_append_pydict(const char *nmea_payload, PyObject *dict, const size_t p
     DictSafeSetItem(dict,"day", msg.day);
     DictSafeSetItem(dict,"hour", msg.hour);
     DictSafeSetItem(dict,"minute", msg.minute);
+    DictSafeSetItem(dict,"duration", msg.duration_minutes);
 
     PyObject *sub_area_list = PyList_New(msg.sub_areas.size()); // Sub Areas list for python
 

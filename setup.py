@@ -12,22 +12,10 @@ ais_module = Extension('ais',
                                'ais5.cpp', # Static data report / ship name
                                'ais6.cpp', # Addressed binary message (ABM)
                                'ais7_13.cpp',
-<<<<<<< HEAD
-                               'ais8.cpp',
-                               'ais8_001_22.cpp',
-                               'ais8_366_22.cpp',
-                               'ais9.cpp',
-                               'ais10.cpp',
-                               'ais12.cpp',
-                               'ais14.cpp',
-                               'ais15.cpp',
-                               'ais18.cpp',
-                               'ais19.cpp',
-                               'ais21.cpp',
-                               'ais24.cpp',
-=======
                                'ais8.cpp', # Broadcast binary message (BBM)
                                'ais8_001_22.cpp', # Area notice
+                               'ais8_200_10.cpp', # Inland ENCs
+                               'ais8_366_22.cpp',
                                'ais9.cpp',
                                'ais10.cpp', # :
                                # 11 See 4 - ;
@@ -48,7 +36,6 @@ ais_module = Extension('ais',
                                'ais26.cpp', # J - Multi-slot binary message with comm-state
                                'ais27.cpp', # K - Long-range position
                                # 'ais28.cpp', # L - Not yet defined
->>>>>>> 6761fb77405f747de605e16941532f33ba4b87ee
                                ])
 
 setup (name = 'libais',
