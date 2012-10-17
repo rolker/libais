@@ -97,4 +97,10 @@ if(BUILD_TESTS)
 
 endif()
 
-# There must be a new line after each command!
+option(BUILD_OLD_TESTS  "Enable old testing code." OFF)
+
+if(BUILD_OLD_TESTS)
+    add_executable(test_libais test_libais.cpp)
+    target_link_libraries(test_libais ais)
+    add_test(test_libais test_libais)
+endif()

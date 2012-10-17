@@ -569,7 +569,7 @@ norm: !AIVDM,1,1,,A,81mg=5@0EP:3>JWH07P>0<D1=M1t00000R2Q65`HM`01J000,3*70,rUNKNO
             // ((-70.766667, 42.45), (-69.866667, 42.45), (-69.866667, 43.1), (-70.766667, 43.1))
             
             std::cout << "\n\n: Polygon - Box****\n";
-            Ais8_001_22 msg("81mg=5@0EP00TJB8000=vK21=fW400000TFMjP1JL>FsJ000");
+            Ais8_001_22 msg("81mg=5@0EP00TJB8000=vK21=fW400000TFMjP1JL>FsJ000",3);
             if (!msg.had_error()) msg.print(); else std::cout<<"FAILED\n";
             std::cout << "\n";
             
