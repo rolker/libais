@@ -80,7 +80,7 @@ TEST(TestAis123, AisMsg1) {
 
     ASSERT_FLOAT_EQ(0.1,m.sog);
 
-    ASSERT_EQ(false,m.position_accuracy);
+    ASSERT_FALSE(m.position_accuracy);
     ASSERT_FLOAT_EQ(-146.2903833,m.x);
     ASSERT_FLOAT_EQ(  61.1141333,m.y);
 
@@ -89,32 +89,32 @@ TEST(TestAis123, AisMsg1) {
     ASSERT_EQ(0, m.timestamp);
     ASSERT_EQ(0, m.special_manoeuvre); // Pre ITU 1371-3, this and the spare were one
     ASSERT_EQ(0, m.spare);
-    ASSERT_EQ(false, m.raim);
+    ASSERT_FALSE(m.raim);
 
     // COMM STATE
     ASSERT_EQ(0,m.sync_state);
     ASSERT_EQ(6,m.slot_timeout);
 
-    ASSERT_EQ(false,m.received_stations_valid);
+    ASSERT_FALSE(m.received_stations_valid);
     ASSERT_EQ(-1,m.received_stations);
 
     ASSERT_EQ(true,m.slot_number_valid);
     ASSERT_EQ(2233,m.slot_number);
 
-    ASSERT_EQ(false,m.utc_valid);
+    ASSERT_FALSE(m.utc_valid);
     ASSERT_EQ(-1,m.utc_hour);
     ASSERT_EQ(-1,m.utc_min);
     ASSERT_EQ(-1,m.utc_spare);
 
-    ASSERT_EQ(false,m.slot_offset_valid);
+    ASSERT_FALSE(m.slot_offset_valid);
     ASSERT_EQ(-1,m.slot_offset);
 
-    ASSERT_EQ(false,m.slot_increment_valid);
+    ASSERT_FALSE(m.slot_increment_valid);
     ASSERT_EQ(-1,m.slot_increment);
 
-    ASSERT_EQ(false,m.slots_to_allocate_valid);
+    ASSERT_FALSE(m.slots_to_allocate_valid);
     ASSERT_EQ(-1,m.slots_to_allocate);
 
-    ASSERT_EQ(false,m.keep_flag_valid);
-    ASSERT_EQ(false,m.keep_flag);
+    ASSERT_FALSE(m.keep_flag_valid);
+    ASSERT_FALSE(m.keep_flag);
 }
