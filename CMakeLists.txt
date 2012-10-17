@@ -2,18 +2,7 @@
 cmake_minimum_required (VERSION 2.8)
 project (libais)
 
-set (LIBAIS_VERSION_MAJOR 0)
-set (LIBAIS_VERSION_MINOR 6)
-
-# Was driving me nuts in rough development.  Need to restructure
-#configure_file (
-#  "${PROJECT_SOURCE_DIR}/ais.h.in"
-#  "${PROJECT_BINARY_DIR}/ais.h"
-#  )
-
 #include_directories("${PROJECT_BINARY_DIR}")
-
-
 
 set (HEADERS
     ais.h
@@ -45,6 +34,20 @@ install(FILES ${HEADERS} DESTINATION include)
 add_library(ais STATIC  ${SOURCES} )
 install(TARGETS ais DESTINATION lib)
 
+option(AIS_PYTHON "Build python bindings" ON)
+
+if(AIS_PYTHON)
+    find_package(PythonInterp REQUIRED)
+    set (PYTHON_SOURCES ${SOURCES} ais_py.cpp)
+    add_custom_target(python_build ALL ${PYTHON_EXECUTABLE} setup.py build --build-base ${CMAKE_BINARY_DIR}/python
+                       DEPENDS ${SOURCES}
+                       WORKING_DIRECTORY ${CMAKE_SOURCE_DIR}
+                       COMMENT "python build"
+                       SOURCES ${PYTHON_SOURCES}
+                      )
+
+    install(CODE "message(\"python install\")\n execute_process(COMMAND ${PYTHON_EXECUTABLE} setup.py -q build --build-base ${CMAKE_BINARY_DIR}/python install --prefix ${CMAKE_INSTALL_PREFIX} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})")
+endif()
 
 # testing support
 
