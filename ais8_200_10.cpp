@@ -1,6 +1,6 @@
 #include "ais8_200_10.h"
 
-Ais8_200_10::Ais8_200_10(const char* nmea_payload): Ais8(nmea_payload)
+Ais8_200_10::Ais8_200_10(const char* nmea_payload, const size_t pad): Ais8(nmea_payload)
 {
     std::bitset<MAX_BITS> bs;
     status = aivdm_to_bits(bs, nmea_payload);

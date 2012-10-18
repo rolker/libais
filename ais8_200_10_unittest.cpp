@@ -20,7 +20,7 @@ TEST(ais8dac200fi10, InlandVoyage)
     "83aDoP@j2d<dtMLLN1b@j?bP8hP0","839e7DPj2P000000014hj@O56T00","839dQ<Pj2d=<<Me<d1b@`?aE3hP0"};
     for(int i = 0; i < 8; ++i)
     {
-        Ais8_200_10 msg(payloads[i]);
+        Ais8_200_10 msg(payloads[i],0);
         ASSERT_EQ(AIS_OK, msg.get_error());
     }
 }

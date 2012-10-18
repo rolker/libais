@@ -18,8 +18,9 @@ public:
     int speed_quality;
     int course_quality;
     int heading_quality;
+    int spare2;
     
-    Ais8_200_10(const char *nmea_payload);
+    Ais8_200_10(const char *nmea_payload, const size_t pad);
     ~Ais8_200_10();
     void print();
     

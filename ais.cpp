@@ -130,7 +130,7 @@ AisMsg *decode(std::string const &nmea_payload)
                     {
                         case 10:
                         {
-                            result = new Ais8_200_10(nmea_payload.c_str());
+                            result = new Ais8_200_10(nmea_payload.c_str(),0);
                         }
                     }
                 case 366:

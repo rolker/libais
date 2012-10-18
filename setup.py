@@ -16,6 +16,7 @@ ais_module = Extension('ais',
                                'ais8_001_22.cpp', # Area notice
                                'ais8_001_26.cpp', # Environmental Sensor Report
                                'ais8_200_10.cpp', # Inland ENCs
+                               'ais8_366_22.cpp',
                                'ais9.cpp',
                                'ais10.cpp', # :
                                # 11 See 4 - ;
