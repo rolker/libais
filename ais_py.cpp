@@ -2006,6 +2006,7 @@ decode(PyObject *self, PyObject *args) {
 
     int _pad;
     const char *nmea_payload;
+    // TODO: what to do about if no pad bits?  Maybe warn and set to 0?
     if (!PyArg_ParseTuple(args, "si", &nmea_payload, &_pad)) {
         PyErr_Format(ais_py_exception, "ais.decode: expected string argument");
         return 0;
