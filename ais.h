@@ -420,6 +420,7 @@ class Ais6_1_25 : public Ais6 {
 std::ostream& operator<< (std::ostream& o, Ais6_1_25 const& msg);
 
 
+// TODO: addressed sensor report 6_1_26
 
 // IMO Circ 289 Route information
 class Ais6_1_28 : public Ais6 {
@@ -791,6 +792,7 @@ std::ostream& operator<< (std::ostream& o, Ais8_1_24 const& msg);
 
 // No message 8_1_15
 
+const size_t AIS8_1_26_REPORT_SIZE = 112;
 
 enum Ais8_1_26_SensorEnum {
   AIS8_1_26_SENSOR_ERROR = -1,
@@ -814,18 +816,16 @@ enum Ais8_1_26_SensorEnum {
 
 class Ais8_1_26_SensorReport {
  public:
-  virtual Ais8_1_26_SensorEnum getType() const = 0;
-  virtual ~Ais8_1_26_SensorReport()
-  { };
-  virtual void print()=0;
-#if 1
   int report_type;
   int utc_day, utc_hr, utc_min;
   int site_id;  // aka link_id
-#endif
+
+  virtual Ais8_1_26_SensorEnum getType() const = 0;
+  virtual ~Ais8_1_26_SensorReport() {}
+  virtual void print()=0;
 };
 
-// TODO: need pad?
+
 Ais8_1_26_SensorReport* ais8_1_26_sensor_report_factory(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
 
 class Ais8_1_26_Location : public Ais8_1_26_SensorReport {
@@ -835,7 +835,7 @@ class Ais8_1_26_Location : public Ais8_1_26_SensorReport {
   int spare;
 
   Ais8_1_26_Location(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_Location() {};
+  Ais8_1_26_Location() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_LOCATION;}
   void print();
 };
@@ -846,8 +846,9 @@ class Ais8_1_26_Station : public Ais8_1_26_SensorReport {
   int spare;
 
   Ais8_1_26_Station(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_Station() {/* */};
+  Ais8_1_26_Station() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_STATION;}
+  void print();
 };
 
 class Ais8_1_26_Wind : public Ais8_1_26_SensorReport {
@@ -858,11 +859,13 @@ class Ais8_1_26_Wind : public Ais8_1_26_SensorReport {
   int wind_forcast, wind_gust_forcast; // knots
   int wind_dir_forcast;
   int utc_day_forcast, utc_hour_forcast, utc_min_forcast;
+  int duration;
   int spare;
 
   Ais8_1_26_Wind(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_Wind() {};
+  Ais8_1_26_Wind() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_WIND;}
+  void print();
 };
 
 class Ais8_1_26_WaterLevel : public Ais8_1_26_SensorReport {
@@ -882,6 +885,7 @@ class Ais8_1_26_WaterLevel : public Ais8_1_26_SensorReport {
   Ais8_1_26_WaterLevel(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
   Ais8_1_26_WaterLevel() {};
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_WATER_LEVEL;}
+  void print();
 };
 
 struct Ais8_1_26_Curr2D_Current {
@@ -892,13 +896,14 @@ struct Ais8_1_26_Curr2D_Current {
 
 class Ais8_1_26_Curr2D : public Ais8_1_26_SensorReport {
  public:
-  std::vector<Ais8_1_26_Curr2D_Current> currents;
+  Ais8_1_26_Curr2D_Current currents[3];
   int type;
   int spare;
 
   Ais8_1_26_Curr2D(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_Curr2D() {};
+  Ais8_1_26_Curr2D() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_CURR_2D;}
+  void print();
 };
 
 struct Ais8_1_26_Curr3D_Current {
@@ -913,8 +918,9 @@ class Ais8_1_26_Curr3D : public Ais8_1_26_SensorReport {
   int spare;
 
   Ais8_1_26_Curr3D(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_Curr3D() {};
+  Ais8_1_26_Curr3D() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_CURR_3D;}
+  void print();
 };
 
 struct Ais8_1_26_HorzFlow_Current {
@@ -929,8 +935,9 @@ class Ais8_1_26_HorzFlow : public Ais8_1_26_SensorReport {
   int spare;
 
   Ais8_1_26_HorzFlow(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_HorzFlow() {};
+  Ais8_1_26_HorzFlow() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_HORZ_FLOW;}
+  void print();
 };
 
 class Ais8_1_26_SeaState : public Ais8_1_26_SensorReport {
@@ -947,8 +954,9 @@ class Ais8_1_26_SeaState : public Ais8_1_26_SensorReport {
   float salinity;
 
   Ais8_1_26_SeaState(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_SeaState() {};
+  Ais8_1_26_SeaState() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_SEA_STATE;}
+  void print();
 };
 
 class Ais8_1_26_Salinity : public Ais8_1_26_SensorReport {
@@ -959,11 +967,12 @@ class Ais8_1_26_Salinity : public Ais8_1_26_SensorReport {
   float salinity; // 0/00 ppt
   int salinity_type;
   int sensor_type;
-  int spare;
+  int spare[2];
 
   Ais8_1_26_Salinity(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_Salinity() {};
+  Ais8_1_26_Salinity() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_SALINITY;}
+  void print();
 };
 
 class Ais8_1_26_Wx : public Ais8_1_26_SensorReport {
@@ -981,8 +990,9 @@ class Ais8_1_26_Wx : public Ais8_1_26_SensorReport {
   int spare;
 
   Ais8_1_26_Wx(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_Wx() {};
+  Ais8_1_26_Wx() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_WX;}
+  void print();
 };
 
 class Ais8_1_26_AirDraught : public Ais8_1_26_SensorReport {
@@ -991,18 +1001,21 @@ class Ais8_1_26_AirDraught : public Ais8_1_26_SensorReport {
   int trend;
   int utc_day_forcast, utc_hour_forcast, utc_min_forcast;
   int spare;
+
   Ais8_1_26_AirDraught(const std::bitset<AIS8_MAX_BITS> &bs, const size_t offset);
-  Ais8_1_26_AirDraught() {};
+  Ais8_1_26_AirDraught() {}
   Ais8_1_26_SensorEnum getType() const {return AIS8_1_26_SENSOR_AIR_DRAUGHT;}
+  void print();
 };
 
 // IMO Circ 289 Environmental
 class Ais8_1_26 : public Ais8 {
  public:
-  std::vector<Ais8_1_26_SensorReport> reports;
+  std::vector<Ais8_1_26_SensorReport *> reports;
 
   /// @arg pad Padding bits, this is the last value before the checksum in the NMEA string.
   Ais8_1_26(const char *nmea_payload, const size_t pad);
+  ~Ais8_1_26();  
   void print();
 };
 std::ostream& operator<< (std::ostream& o, Ais8_1_26 const& msg);
