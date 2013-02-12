@@ -1,1 +1,5 @@
-Copyright 2010.  Released under the LGPL v3
+Based on https://github.com/schwehr/libais
+Copyright 2010 Kurt Schwehr.  Released under the LGPL v3
+
+Additions copyright by Roland Arsenault 2012-2013
+

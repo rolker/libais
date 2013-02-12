@@ -1,8 +1,5 @@
-# -*- shell-script -*- make up a mode for emacs
 cmake_minimum_required (VERSION 2.8)
 project (libais)
-
-#include_directories("${PROJECT_BINARY_DIR}")
 
 set (HEADERS
     ais.h
@@ -12,7 +9,7 @@ set (HEADERS
 )
 
 set (SOURCES
-    ais
+    ais.cpp
     ais1_2_3
     ais4_11
     ais5
@@ -90,7 +87,6 @@ if(BUILD_TESTS)
     endif()
 
     set (TEST_SOURCES
-        ais1_2_3_unittest
         ais8_001_22_unittest
         ais8_200_10_unittest
     )
@@ -111,10 +107,5 @@ if(BUILD_TESTS)
 
 endif()
 
-option(BUILD_OLD_TESTS  "Enable old testing code." OFF)
-
-if(BUILD_OLD_TESTS)
-    add_executable(test_libais test_libais.cpp)
-    target_link_libraries(test_libais ais)
-    add_test(test_libais test_libais)
-endif()
+include_directories(${CMAKE_SOURCE_DIR})
+add_subdirectory(src)
