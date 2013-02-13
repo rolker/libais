@@ -14,7 +14,7 @@
 
 namespace ais{
     
-    /// Container for binary version of nmea payload.
+    /// Container for binary version of AIS message or fragment.
     class BinaryPayload{
         std::vector<bool> _payload;
 
@@ -40,6 +40,8 @@ namespace ais{
             }
         }
     public:
+        /// Cursor into a BinaryPayload.
+        /// Allows reading data chunks while keeping track of position in the payload.
         class Cursor
         {
             std::vector<bool>::const_iterator _cursor;
@@ -77,12 +79,49 @@ namespace ais{
                 unsigned long tmp = ret.to_ulong();
                 return *reinterpret_cast<long *>(&tmp);
             }
+
+            /// Read an AIS encoded string.
+            /// len in bits, should be a multiple of 6.
+            std::string str_read(int len = -1)
+            {
+                if (len == -1)
+                    len = 6*((_iend - _cursor)/6);
+                std::string ret(len/6,'@');
+                if(ret.size()*6 != len)
+                    throw (exception("String read len in bits not multiple of 6"));
+                for(std::string::iterator c = ret.begin(); c != ret.end(); ++c)
+                {
+                    int val = uread(6);
+                    if(val < 32)
+                        val += 64;
+                    *c = val;
+                }
+                return ret;
+            }
+            
+            BinaryPayload bin_read()
+            {
+                std::vector< bool >::const_iterator ret = _cursor;
+                _cursor = _iend;
+                return BinaryPayload(ret,_iend);
+            }
+
+            bool empty() const
+            {
+                return _cursor == _iend;
+            }
+
         };
-        
+
+        BinaryPayload(){}
+
+        BinaryPayload(std::vector<bool>::const_iterator b, std::vector<bool>::const_iterator e):_payload(b,e){}
+
         BinaryPayload(const AsciiPayload &ascii){
             init(ascii.payload, ascii.pad_bits);
         }
-        
+
+        /// @arg pad Padding bits, this is the last value before the checksum in the NMEA string.
         BinaryPayload(const std::string &s, int pad){
             init(s, pad);
         }

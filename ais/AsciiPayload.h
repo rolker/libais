@@ -9,14 +9,14 @@
 #include <string>
 
 namespace ais{
-    
+
     struct AsciiPayload{
         std::string payload;
         int pad_bits;
 
-        
-        AsciiPayload(const std::string &pl, int pb):payload(pl),pad_bits(pb){}
-        
+        /// @arg pad Padding bits, this is the last value before the checksum in the NMEA string.
+        AsciiPayload(const std::string &pl, int pad):payload(pl),pad_bits(pad){}
+
         int get_message_id() const
         {
             return payload[0] - 48;
