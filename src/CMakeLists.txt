@@ -13,6 +13,7 @@ set (TEST_SOURCES
     UTCInquiry_unittest.cpp
     AddressedSafetyMessage_unittest.cpp
     SafetyBroadcastMessage_unittest.cpp
+    Interrogation_unittest.cpp
 )
 
 if(BUILD_TESTS)
