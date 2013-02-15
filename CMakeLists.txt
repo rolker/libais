@@ -78,5 +78,5 @@ if(BUILD_TESTS)
     add_test(all_tests all_tests)
 endif()
 
-include_directories(${CMAKE_SOURCE_DIR})
+include_directories(${CMAKE_SOURCE_DIR}/include)
 add_subdirectory(src)
