@@ -18,7 +18,7 @@ namespace ais
     /// only in response to interrogation by Message 10. 
     /// Message 11 is only transmitted as a result of a UTC request message (Message 10). The UTC and 
     /// date response should be transmitted on the channel, where the UTC request message was received.
-    struct BaseStationReport: public Header, LonLat, FixType, RAIM, SyncState, SOTDMA
+    struct BaseStationReport: public Header, LonLatAccuracy, FixType, RAIM, SyncState, SOTDMA
     {
         /// UTC year.
         /// 1-9999; 0 = UTC year not available = default
@@ -79,7 +79,7 @@ namespace ais
             minute = payload_cursor.uread(6);
             second = payload_cursor.uread(6);
 
-            LonLat::decode(payload_cursor);
+            LonLatAccuracy::decode(payload_cursor);
             FixType::decode(payload_cursor);
 
             transmission_ctl = payload_cursor.uread(1);

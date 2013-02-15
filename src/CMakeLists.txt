@@ -15,6 +15,7 @@ set (TEST_SOURCES
     SafetyBroadcastMessage_unittest.cpp
     Interrogation_unittest.cpp
     AssignedModeCommand_unittest.cpp
+    GNSSBroadcastBinaryMessage_unittest.cpp
 )
 
 if(BUILD_TESTS)

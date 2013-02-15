@@ -15,7 +15,7 @@ namespace ais
 
 /// Messages 1, 2, 3: Position reports.
 /// The position report should be output periodically by mobile stations.
-struct PositionReport: public Header, LonLat, COG, Timestamp, RAIM, SyncState
+struct PositionReport: public Header, LonLatAccuracy, COG, Timestamp, RAIM, SyncState
 {
     /// Navigational status.
     /// 0 = under way using engine, 1 = at anchor, 2 = not under command, 
@@ -134,7 +134,7 @@ struct PositionReport: public Header, LonLat, COG, Timestamp, RAIM, SyncState
             sog_not_available = false;
         }
 
-        LonLat::decode(payload_cursor);
+        LonLatAccuracy::decode(payload_cursor);
 
         COG::decode(payload_cursor);
 
@@ -236,7 +236,7 @@ struct PositionReport_ITDMA: public PositionReport, ITDMA
 /// This message should be used as a standard position report for aircraft involved in SAR operations.
 /// Stations other than aircraft involved in SAR operations should not transmit this message. The
 /// default reporting interval for this message should be 10 s.
-struct SARPositionReport: public Header, LonLat, COG, Timestamp, DTE, RAIM, SyncState, SOTDMA, ITDMA
+struct SARPositionReport: public Header, LonLatAccuracy, COG, Timestamp, DTE, RAIM, SyncState, SOTDMA, ITDMA
 {
     /// Altitude (GNSS)
     /// Altitude (derived from GNSS or barometric (see altitude sensor
@@ -290,7 +290,7 @@ struct SARPositionReport: public Header, LonLat, COG, Timestamp, DTE, RAIM, Sync
         alt = payload_cursor.uread(12);
         sog = payload_cursor.uread(10);
 
-        LonLat::decode(payload_cursor);
+        LonLatAccuracy::decode(payload_cursor);
         COG::decode(payload_cursor);
         Timestamp::decode(payload_cursor);
 

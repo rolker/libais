@@ -12,14 +12,6 @@ namespace ais
 {
     struct LonLat
     {
-        /// Position accuracy.
-        /// The position accuracy (PA) flag should be determined in accordance 
-        /// with Table 47 
-        /// 1 = high (≤ 10 m)  
-        /// 0 = low (>10 m) 
-        /// 0 = default
-        int position_accuracy;
-        
         /// Longitude (decoded).
         /// Longitude in 1/10 000 min (±180º, East = positive (as per 2’s 
         /// complement), West = negative (as per 2’s complement).  
@@ -32,12 +24,10 @@ namespace ais
         /// (3412140h) = not available = default) 
         float y;
 
-        LonLat():position_accuracy(0),x(181),y(91){}
+        LonLat():x(181),y(91){}
 
         void decode(BinaryPayload::Cursor &payload_cursor)
         {
-            position_accuracy = payload_cursor.uread(1);
-
             int x_raw = payload_cursor.sread(28);
             if (x_raw == 0x6791AC0)
                 x = 181;
@@ -51,7 +41,26 @@ namespace ais
                 y = y_raw / 600000.;
         }
     };
-    
+
+    struct LonLatAccuracy: public LonLat
+    {
+        /// Position accuracy.
+        /// The position accuracy (PA) flag should be determined in accordance 
+        /// with Table 47 
+        /// 1 = high (≤ 10 m)  
+        /// 0 = low (>10 m) 
+        /// 0 = default
+        int position_accuracy;
+        
+        LonLatAccuracy():position_accuracy(0){}
+        
+        void decode(BinaryPayload::Cursor &payload_cursor)
+        {
+            position_accuracy = payload_cursor.uread(1);
+            LonLat::decode(payload_cursor);
+        }
+    };
+
     struct COG
     {
         /// COG (decoded).
@@ -367,6 +376,47 @@ namespace ais
             dac = payload_cursor.uread(10);
             fi = payload_cursor.uread(6);
             payload = payload_cursor.bin_read();
+        }
+    };
+
+    struct GNSSDifferentialCorrectionData
+    {
+        /// Message type.
+        /// Recommendation ITU-R M.823
+        int msg_type;
+
+        /// Station ID.
+        /// Recommendation ITU-R M.823 station identifier
+        int station_id;
+
+        /// Z count.
+        /// Time value in 0.6 s (0-3 599.4)
+        float z_cnt;
+
+        /// Sequence number.
+        /// Message sequence number (cyclic 0-7)
+        int seq_num;
+
+        /// Health.
+        /// Reference station health (specified in Recommendation ITU-R M.823)
+        int health;
+
+        std::vector<int> dgnss_data;
+        
+        GNSSDifferentialCorrectionData()
+        :msg_type(-1),station_id(-1),z_cnt(-1),seq_num(-1)
+        {}
+
+        void decode(BinaryPayload::Cursor &payload_cursor)
+        {
+            msg_type = payload_cursor.uread(6);
+            station_id = payload_cursor.uread(10);
+            z_cnt = payload_cursor.uread(13)*0.6;
+            seq_num = payload_cursor.uread(3);
+            int n = payload_cursor.uread(5);
+            health = payload_cursor.uread(3);
+            for(int i = 0; i < n; ++i)
+                dgnss_data.push_back(payload_cursor.uread(24));
         }
     };
 }
