@@ -62,29 +62,9 @@ endif()
 option(BUILD_TESTS  "Enable testing." OFF)
 
 if(BUILD_TESTS)
+    add_subdirectory(gtest-1.6.0/)
 
-    option(TESTS_NEED_PTHREADS "Enable if tests need to link agains pthreads" OFF)
-    option(SEPARATE_TESTS "Enable if separate tests should be built, otherwise a single test executable will be built containing all tests" ON)
-
-    find_path(gtest_INCLUDE_DIR gtest/test.h)
-    find_library(gtest_LIBRARY gtest)
-    find_library(gtest_main_LIBRARY gtest_main)
-
-    if(gtest_INCLUDE_DIR AND gtest_LIBRARY AND gtest_main_LIBRARY)
-        include_directories(${gtest_INCLUDE_DIR})
-        set(TEST_LIBS ${TEST_LIBS} ${gtest_LIBRARY} ${gtest_main_LIBRARY})
-    else()
-        message(FATAL_ERROR "gtest not found")
-    endif()
-
-    if(TESTS_NEED_PTHREADS)
-        find_package(Threads)
-        if(CMAKE_THREAD_LIBS_INIT AND CMAKE_USE_PTHREADS_INIT)
-            set(TEST_LIBS ${TEST_LIBS} ${CMAKE_THREAD_LIBS_INIT})
-        else()
-            message(FATAL_ERROR "pthreads not found")
-        endif()
-    endif()
+    include_directories(${gtest_SOURCE_DIR}/include)
 
     set (TEST_SOURCES
         ais8_001_22_unittest
@@ -93,18 +73,9 @@ if(BUILD_TESTS)
 
     enable_testing()
 
-    if(SEPARATE_TESTS)
-        foreach(TEST_SOURCE ${TEST_SOURCES})
-            add_executable(${TEST_SOURCE} ${TEST_SOURCE})
-            target_link_libraries (${TEST_SOURCE} ais ${TEST_LIBS})
-            add_test(${TEST_SOURCE} ${TEST_SOURCE})
-        endforeach()
-    else()
-        add_executable(all_tests ${TEST_SOURCES})
-        target_link_libraries(all_tests ais ${TEST_LIBS})
-        add_test(all_tests all_tests)
-    endif()
-
+    add_executable(all_tests ${TEST_SOURCES})
+    target_link_libraries(all_tests ais gtest_main)
+    add_test(all_tests all_tests)
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR})

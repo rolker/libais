@@ -14,11 +14,11 @@ set (TEST_SOURCES
     AddressedSafetyMessage_unittest.cpp
     SafetyBroadcastMessage_unittest.cpp
     Interrogation_unittest.cpp
+    AssignedModeCommand_unittest.cpp
 )
 
 if(BUILD_TESTS)
     add_executable(gtests ${TEST_SOURCES})
-    target_link_libraries(gtests ais ${TEST_LIBS})
+    target_link_libraries(gtests gtest_main)
     add_test(gtests all_tests)
-
 endif()

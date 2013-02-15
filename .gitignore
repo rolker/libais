@@ -6,3 +6,7 @@ build
 nohup.out
 foo*
 test_libais
+*~
+*kdev4
+dist
+*.egg-info
